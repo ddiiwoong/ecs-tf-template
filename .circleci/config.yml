@@ -8,13 +8,13 @@ jobs:
       - checkout
       - run:
           name: Init terraform
-          command: terraform init ~/ecs-provision-tf
+          command: terraform init # ~/ecs-provision-tf
       - run:
           name: Validate terraform
-          command: terraform validate ~/ecs-provision-tf
+          command: terraform validate # ~/ecs-provision-tf
       - run:
           name: Plan terraform
-          command: terraform plan ~/ecs-provision-tf
+          command: terraform plan # ~/ecs-provision-tf
   deploy:
     working_directory: ~/ecs-provision-tf
     docker:
