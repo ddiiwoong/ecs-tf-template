@@ -9,11 +9,11 @@ resource "aws_batch_compute_environment" "default"{
     max_vcpus = 1 
     min_vcpus = 0 
     security_group_ids = [
-      "sg-0632cf81b5c4dff17" 
+      "sg-0431b76a9034f92d6" 
     ]
     subnets = [
-      "subnet-0c4f8135b536e8fab",
-      "subnet-0a261950d894cf27e"
+      "subnet-0eb7eff63678c8796",
+      "subnet-0cd41779a034de1ab"
     ] 
     type = "EC2" 
   } 

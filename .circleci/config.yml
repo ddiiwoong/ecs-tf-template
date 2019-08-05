@@ -11,13 +11,6 @@ jobs:
     executor: my-executor
     steps:
       - checkout
-      - run: 
-          name: "Setup AWS environment variables"
-          command: |
-            echo 'export AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID"' >> $BASH_ENV
-            echo 'export AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY"' >> $BASH_ENV
-            echo 'export TF_VAR_AWS_ACCESS_KEY_ID="$TF_VAR_AWS_ACCESS_KEY_ID"' >> $BASH_ENV
-            echo 'export TF_VAR_AWS_SECRET_ACCESS_KEY="$TF_VAR_AWS_SECRET_ACCESS_KEY"' >> $BASH_ENV
       # - run:
       #     name: "Where Region?"
       #     command: echo ${AWS_DEFAULT_REGION}
@@ -29,9 +22,7 @@ jobs:
           command: terraform validate ~/project/ecs-provision-tf
       - run:
           name: Plan terraform
-          command: |
-            source $BASH_ENV
-            terraform plan ~/project/ecs-provision-tf
+          command: terraform plan ~/project/ecs-provision-tf
 
   deploy:
     executor: my-executor
