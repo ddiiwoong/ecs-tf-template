@@ -14,6 +14,9 @@ jobs:
             echo 'export AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY"' >> $BASH_ENV
             echo 'export TF_VAR_AWS_ACCESS_KEY_ID="$TF_VAR_AWS_ACCESS_KEY_ID"' >> $BASH_ENV
             echo 'export TF_VAR_AWS_SECRET_ACCESS_KEY="$TF_VAR_AWS_SECRET_ACCESS_KEY"' >> $BASH_ENV
+      - run: # test what branch we're on.
+          name: "Where Region?"
+          command: echo ${AWS_DEFAULT_REGION}
       - run:
           name: Init terraform 
           command: terraform init ~/project/ecs-provision-tf
