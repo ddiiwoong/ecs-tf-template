@@ -1,22 +1,22 @@
 version: 2.1
 jobs:
   test:
-    working_directory: ~/ecs-provision-tf
+    working_directory: ~
     docker:
       - image: hashicorp/terraform:light
     steps:
       - checkout
       - run:
           name: Init terraform
-          command: terraform init # ~/ecs-provision-tf
+          command: terraform init ~/ecs-provision-tf
       - run:
           name: Validate terraform
-          command: terraform validate # ~/ecs-provision-tf
+          command: terraform validate ~/ecs-provision-tf
       - run:
           name: Plan terraform
-          command: terraform plan # ~/ecs-provision-tf
+          command: terraform plan ~/ecs-provision-tf
   deploy:
-    working_directory: ~/ecs-provision-tf
+    working_directory: ~
     docker:
       - image: hashicorp/terraform:light
     steps:
