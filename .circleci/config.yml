@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  slack: circleci/slack@3.3.0
+
 executors:
   my-executor:
     working_directory: ~/project
@@ -39,10 +42,21 @@ workflows:
   test-and-deploy:
     jobs:
       - test
+      - slack/approval-notification:
+          message: TF Apply Pending approval
+          color: '#42e2f4'
+          mentions: 'UEXB11CMR'
+          webhook: '${SLACK_WEBHOOK}'
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - master
       - hold:
           type: approval
           requires:
-            - test
+            - slack/approval-notification
           filters:
             branches:
               only: master
