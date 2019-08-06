@@ -52,7 +52,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/project
-      - run: terraform plan -input=false -out=terraform.plan
+      - run: terraform plan -input=false -out=terraform.plan ~/project/ecs-provision-tf
       - persist_to_workspace:
           root: ~/project
           paths: ecs-provision-tf
