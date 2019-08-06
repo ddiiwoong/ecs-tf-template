@@ -13,15 +13,15 @@ jobs:
   checkout_code:
     executor: my-executor
     steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Revision }}
-            - source-v1-
+      # - restore_cache:
+      #     keys:
+      #       - source-v1-{{ .Revision }}
+      #       - source-v1-
       - checkout
-      - save_cache:
-          key: source-v1-{{ .Revision }}
-          paths:
-            - .git
+      # - save_cache:
+      #     key: source-v1-{{ .Revision }}
+      #     paths:
+      #       - .git
       - run:
           name: Init terraform 
           command: terraform init -input=false
