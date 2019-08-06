@@ -13,24 +13,24 @@ jobs:
   checkout_code:
     executor: my-executor
     steps:
-      # - restore_cache:
-      #     keys:
-      #       - source-v1-{{ .Revision }}
-      #       - source-v1-
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Revision }}
+            - source-v1-
       - checkout
-      # - save_cache:
-      #     key: source-v1-{{ .Revision }}
-      #     paths:
-      #       - .git
+      - save_cache:
+          key: source-v1-{{ .Revision }}
+          paths:
+            - .git
       - run:
           name: Init terraform 
-          command: terraform init -input=false ~/project/ecs-provision-tf
+          command: terraform init -input=false
       - persist_to_workspace:
-          root: ~/project
-          paths: ecs-provision-tf
+          root: ~/
+          paths: project
       - run:
           name: Validate terraform 
-          command: terraform validate ~/project/ecs-provision-tf
+          command: terraform validate
   lint:
     executor: my-executor
     steps:
@@ -51,18 +51,16 @@ jobs:
     executor: my-executor
     steps:
       - attach_workspace:
-          at: ~/project
-      - run: terraform plan -input=false -out=terraform.plan ~/project/ecs-provision-tf
+          at: ~/
+      - run: terraform plan -input=false -out=terraform.plan
       - persist_to_workspace:
-          root: ~/project
-          paths: ecs-provision-tf
+          root: ~/
+          paths: project
   apply:
     executor: my-executor
     steps:
-      - checkout
-      - run:
-          name: Init terraform
-          command: terraform init ~/project/ecs-provision-tf
+      - attach_workspace:
+          at: ~/
       - run:
           name: Apply terraform
           command: terraform apply -auto-approve ~/project/ecs-provision-tf
