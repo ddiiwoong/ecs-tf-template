@@ -24,13 +24,13 @@ jobs:
       #       - .git
       - run:
           name: Init terraform 
-          command: terraform init -input=false
+          command: terraform init -input=false ~/project/ecs-provision-tf
       - persist_to_workspace:
           root: ~/project
           paths: ecs-provision-tf
-      # - run:
-      #     name: Validate terraform 
-      #     command: terraform validate
+      - run:
+          name: Validate terraform 
+          command: terraform validate ~/project/ecs-provision-tf
   lint:
     executor: my-executor
     steps:
