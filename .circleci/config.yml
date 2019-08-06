@@ -26,7 +26,7 @@ jobs:
           name: Init terraform 
           command: terraform init ~/project/ecs-provision-tf
       - persist_to_workspace:
-          root: ~/
+          root: ~/project
           paths: ecs-provision-tf
       - run:
           name: Validate terraform 
@@ -51,10 +51,10 @@ jobs:
     executor: my-executor
     steps:
       - attach_workspace:
-          at: ~/
+          at: ~/project
       - run: terraform plan -input=false -out=terraform.plan
       - persist_to_workspace:
-          root: ~/
+          root: ~/project
           paths: ecs-provision-tf
   apply:
     executor: my-executor
