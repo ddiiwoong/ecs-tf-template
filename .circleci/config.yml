@@ -10,24 +10,53 @@ executors:
       - image: hashicorp/terraform:0.11.14
 
 jobs:
-  test:
+  checkout_code:
     executor: my-executor
     steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Revision }}
+            - source-v1-
       - checkout
-      # - run:
-      #     name: "Where Region?"
-      #     command: echo ${AWS_DEFAULT_REGION}
+      - save_cache:
+          key: source-v1-{{ .Revision }}
+          paths:
+            - .git
       - run:
           name: Init terraform 
           command: terraform init ~/project/ecs-provision-tf
+      - persist_to_workspace:
+          root: ~/
+          paths: /project/ecs-provision-tf
       - run:
           name: Validate terraform 
           command: terraform validate ~/project/ecs-provision-tf
+  lint:
+    executor: my-executor
+    steps:
+      - attach_workspace:
+          at: ~/
       - run:
-          name: Plan terraform
-          command: terraform plan ~/project/ecs-provision-tf
-
-  deploy:
+          name: terraform fmt
+          command: |
+            if [ $(terraform fmt | grep -v .terraform | tee fmt_result.txt | wc -l) -gt 0 ]; then
+              echo "Format of this terraform files is not appropriate:"
+              echo
+              cat fmt_result.txt
+              echo
+              echo "Please run terraform fmt"
+              exit 1
+            fi
+  plan:
+    executor: my-executor
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run: terraform plan -input=false -out=terraform.plan
+      - persist_to_workspace:
+          root: ~/
+          paths: /project/ecs-provision-tf
+  apply:
     executor: my-executor
     steps:
       - checkout
@@ -37,18 +66,25 @@ jobs:
       - run:
           name: Apply terraform
           command: terraform apply -auto-approve ~/project/ecs-provision-tf
+
 workflows:
   version: 2
   test-and-deploy:
     jobs:
-      - test
+      - checkout_code
+      - lint:
+          requires:
+            - checkout_code
+      - plan:
+          requires:
+            - lint
       - slack/approval-notification:
           message: TF Apply Pending approval
           color: '#42e2f4'
           mentions: 'UEXB11CMR'
           webhook: '${SLACK_WEBHOOK}'
           requires:
-            - test
+            - lint
           filters:
             branches:
               only:
@@ -60,7 +96,7 @@ workflows:
           filters:
             branches:
               only: master
-      - deploy:
+      - apply:
           requires:
             - hold
           filters:
