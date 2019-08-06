@@ -28,9 +28,9 @@ jobs:
       - persist_to_workspace:
           root: ~/project
           paths: ecs-provision-tf
-      - run:
-          name: Validate terraform 
-          command: terraform validate
+      # - run:
+      #     name: Validate terraform 
+      #     command: terraform validate
   lint:
     executor: my-executor
     steps:
