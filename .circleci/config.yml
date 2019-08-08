@@ -39,14 +39,16 @@ jobs:
       - run:
           name: terraform fmt
           command: |
-            if [ $(terraform fmt | grep -v .terraform | tee fmt_result.txt | wc -l) -gt 0 ]; then
-              echo "Format of this terraform files is not appropriate:"
-              echo
-              cat fmt_result.txt
-              echo
-              echo "Please run terraform fmt"
-              exit 1
-            fi
+              files=$(terraform fmt -write=false); if [ -n "$files" ]; then echo "$files"; echo -e "\nSome terraform files need be formatted, run 'terraform fmt' to fix"; exit 1; fi
+          # command: |
+          #   if [ $(terraform fmt | grep -v .terraform | tee fmt_result.txt | wc -l) -gt 0 ]; then
+          #     echo "Format of this terraform files is not appropriate:"
+          #     echo
+          #     cat fmt_result.txt
+          #     echo
+          #     echo "Please run terraform fmt"
+          #     exit 1
+          #   fi
   plan:
     executor: my-executor
     steps:

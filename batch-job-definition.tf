@@ -1,5 +1,5 @@
 resource "aws_batch_job_definition" "default" {
-  name = "circleci_batch_demo" 
+  name = "circleci_batch_demo"
   type = "container"
 
   container_properties = <<CONTAINER_PROPERTIES
