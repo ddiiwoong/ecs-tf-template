@@ -65,7 +65,7 @@ jobs:
           at: ~/
       - run:
           name: Apply terraform
-          command: terraform apply -auto-approve ~/project/ecs-provision-tf
+          command: terraform apply -auto-approve
 
 workflows:
   version: 2
