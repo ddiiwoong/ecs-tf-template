@@ -1,3 +1,3 @@
 # ecs-tf-template
-AWS ECS Terraform Template
+AWS Terraform Template
 
